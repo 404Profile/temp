@@ -2,12 +2,22 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {useForm, usePage} from '@inertiajs/react';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ header, children, flash }) {
     const user = usePage().props.auth.user;
     const { post } = useForm();
     const [balance, setBalance] = useState(user.balance);
+
+    const [flashVisible, setFlashVisible] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setFlashVisible(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [flash]);
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -26,6 +36,16 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-no-repeat bg-fixed bg-center bg-cover" style={{ backgroundImage: 'url(assets/bg-train.jpg)', backgroundSize: 'full' }}>
+            {flashVisible && flash && flash.error && (
+                <div className="fixed top-4 left-1/2 bg-red-500 text-white p-4 rounded-md">
+                    {flash.error}
+                </div>
+            )}
+            {flashVisible && flash && flash.success && (
+                <div className="fixed top-4 left-1/2 bg-green-500 text-white p-4 rounded-md">
+                    {flash.success}
+                </div>
+            )}
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -193,6 +213,7 @@ export default function AuthenticatedLayout({ header, children }) {
             )}
 
             <main>{children}</main>
+
         </div>
     );
 }
