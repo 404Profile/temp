@@ -23,6 +23,14 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
         return () => clearTimeout(timer);
     }, [flash]);
 
+    const show = () => {
+        const timer = setTimeout(() => {
+            setFlashVisible(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }
+
     const filterRoutes = () => {
         const filtered = initialRoutes.filter(route => {
             return (!departurePoint || route.departure_point === departurePoint) &&
@@ -33,7 +41,9 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
     };
 
     const handleOrderTicket = (routeId) => {
-        post(route('tickets.store', { route_id: routeId }));
+        post(route('tickets.store', { route_id: routeId }), {
+            onSuccess: () => show,
+        });
     };
 
     return (
