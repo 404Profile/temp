@@ -7,12 +7,21 @@ import React, { useState } from 'react';
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const { post } = useForm();
+    const [balance, setBalance] = useState(user.balance);
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
-    const handleIncreaseBalance = () => {
-        post(route('increaseBalance'));
+    const fetchBalance = async () => {
+        const response = await fetch(route('getBalance'));
+        const data = await response.json();
+        setBalance(data);
+    };
+
+    const handleIncreaseBalance = async () => {
+        await post(route('increaseBalance'), {
+            onSuccess: () => fetchBalance()
+        });
     };
 
     return (
@@ -77,7 +86,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             Профиль
                                         </Dropdown.Link>
                                         <Dropdown.Link as="button" onClick={handleIncreaseBalance}>
-                                            Пополнить баланс ({user.balance})
+                                            Пополнить баланс ({balance})
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}

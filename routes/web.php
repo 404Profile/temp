@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('routes', RouteController::class);
     Route::resource('tickets', TicketController::class);
     Route::post('/increase-balance', [BalanceController::class, 'increaseBalance'])->name('increaseBalance');
+    Route::post('/get-balance', [BalanceController::class, 'getBalance'])->name('getBalance');
 });
 
 require __DIR__.'/auth.php';

@@ -18,4 +18,9 @@ class BalanceController extends Controller
         }
         return redirect()->back()->with('error', 'У вас уже и так много денег');
     }
+
+    public function getBalance()
+    {
+        return Auth::user()->balance;
+    }
 }

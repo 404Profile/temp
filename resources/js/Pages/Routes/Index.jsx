@@ -9,10 +9,19 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
     const [arrivalPoint, setArrivalPoint] = useState('');
     const [departureDate, setDepartureDate] = useState('');
     const [filteredRoutes, setFilteredRoutes] = useState(initialRoutes);
+    const [flashVisible, setFlashVisible] = useState(true);
 
     useEffect(() => {
         filterRoutes();
     }, [departurePoint, arrivalPoint, departureDate]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setFlashVisible(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [flash]);
 
     const filterRoutes = () => {
         const filtered = initialRoutes.filter(route => {
@@ -27,15 +36,6 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
         post(route('tickets.store', { route_id: routeId }));
     };
 
-    const handleDeleteRoute = (routeId) => {
-        destroy(route('routes.destroy', { id: routeId }), {
-            preserveScroll: true,
-            onSuccess: () => {
-                setFilteredRoutes(filteredRoutes.filter(route => route.id !== routeId));
-            },
-        });
-    };
-
     return (
         <AuthenticatedLayout
             header={
@@ -46,13 +46,13 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
         >
             <Head title="Расписание" />
 
-            {flash.error && (
-                <div className="fixed top-4 right-4 bg-red-500 text-white p-4 rounded-md">
+            {flashVisible && flash.error && (
+                <div className="fixed top-4 left-1/2 bg-red-500 text-white p-4 rounded-md">
                     {flash.error}
                 </div>
             )}
-            {flash.success && (
-                <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded-md">
+            {flashVisible && flash.success && (
+                <div className="fixed top-4 left-1/2 bg-green-500 text-white p-4 rounded-md">
                     {flash.success}
                 </div>
             )}
@@ -114,7 +114,6 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
                                         <div>Время в пути: {calculateTravelTime(route.departure_date, route.departure_time, route.arrival_date, route.arrival_time)}</div>
                                         <div className="w-full flex justify-around">
                                             <button onClick={() => handleOrderTicket(route.id)} className="px-4 py-2 bg-green-500 text-white mr-2 rounded-md w-1/3">Заказать билет</button>
-                                            <button onClick={() => handleDeleteRoute(route.id)} className="px-4 py-2 bg-red-500 text-white rounded-md w-1/3">Удалить маршрут</button>
                                         </div>
                                     </div>
                                 ))
