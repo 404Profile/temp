@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Route;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -44,9 +46,20 @@ class TicketController extends Controller
             return redirect()->back()->with('error', 'Билет уже был заказан на этот маршрут');
         }
 
+        $route = Route::query()->where('id', $request->route_id)->first();
+
+        $user = User::query()->where('id', Auth::id())->first();
+        $user->balance -= $route->cost;
+
+        if ($user->balance < 0) {
+            return redirect()->back()->with('error', 'У вас недостаточно денег');
+        }
+
+        $user->update();
+
         $ticket = new Ticket();
         $ticket->user_id = Auth::id();
-        $ticket->route_id = $request->route_id;
+        $ticket->route_id = $route->id;
         $ticket->save();
 
         return redirect()->route('tickets.index')->with('success', 'Билет успешно заказан');

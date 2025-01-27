@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\RouteController;
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('routes', RouteController::class);
     Route::resource('tickets', TicketController::class);
+    Route::post('/increase-balance', [BalanceController::class, 'increaseBalance'])->name('increaseBalance');
 });
 
 require __DIR__.'/auth.php';

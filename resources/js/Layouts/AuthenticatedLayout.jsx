@@ -1,14 +1,19 @@
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import {useForm, usePage} from '@inertiajs/react';
+import React, { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    const { post } = useForm();
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
+    const handleIncreaseBalance = () => {
+        post(route('increaseBalance'));
+    };
 
     return (
         <div className="min-h-screen bg-no-repeat bg-fixed bg-center bg-cover" style={{ backgroundImage: 'url(assets/bg-train.jpg)', backgroundSize: 'full' }}>
@@ -70,6 +75,9 @@ export default function AuthenticatedLayout({ header, children }) {
                                             href={route('profile.edit')}
                                         >
                                             Профиль
+                                        </Dropdown.Link>
+                                        <Dropdown.Link as="button" onClick={handleIncreaseBalance}>
+                                            Пополнить баланс ({user.balance})
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}
