@@ -43,7 +43,7 @@ class TicketController extends Controller
         $existingTicket = Ticket::where('user_id', Auth::id())->where('route_id', $request->route_id)->first();
 
         if ($existingTicket) {
-            return redirect()->back()->with('error', 'Билет уже был заказан на этот маршрут');
+            return redirect()->route('routes.index')->with('error', 'Билет уже был заказан на этот маршрут');
         }
 
         $route = Route::query()->where('id', $request->route_id)->first();
