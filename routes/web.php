@@ -22,7 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('routes', RouteController::class);
     Route::resource('tickets', TicketController::class);
-    Route::post('/increase-balance', [BalanceController::class, 'increaseBalance'])->name('increaseBalance');
+    Route::get('/increase-balance', [BalanceController::class, 'increaseBalance'])->name('increaseBalance');
+    Route::get('/storeTicket', [TicketController::class, 'storeTicket'])->name('storeTicket');
     Route::post('/get-balance', [BalanceController::class, 'getBalance'])->name('getBalance');
 });
 

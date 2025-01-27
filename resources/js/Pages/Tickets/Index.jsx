@@ -5,24 +5,16 @@ import {Head, useForm} from '@inertiajs/react';
 export default function Tickets({ tickets, flash }) {
     const { delete: destroy } = useForm();
     const [updatedTickets, setUpdatedTickets] = useState(tickets);
-    const [flashVisible, setFlashVisible] = useState(true);
 
     const handleDeleteTicket = (ticketId) => {
         destroy(route('tickets.destroy', { id: ticketId }), {
             preserveScroll: true,
             onSuccess: () => {
                 setUpdatedTickets(updatedTickets.filter(ticket => ticket.id !== ticketId));
+                alert("Билет успешно удален");
             },
         });
     };
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setFlashVisible(false);
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }, [flash]);
 
     return (
         <AuthenticatedLayout
@@ -33,17 +25,6 @@ export default function Tickets({ tickets, flash }) {
             }
         >
             <Head title="Мои билеты" />
-
-            {flashVisible && flash.error && (
-                <div className="fixed top-4 left-1/2 bg-red-500 text-white p-4 rounded-md">
-                    {flash.error}
-                </div>
-            )}
-            {flashVisible && flash.success && (
-                <div className="fixed top-4 left-1/2 bg-green-500 text-white p-4 rounded-md">
-                    {flash.success}
-                </div>
-            )}
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

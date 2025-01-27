@@ -4,48 +4,31 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {useForm, usePage} from '@inertiajs/react';
 import React, {useEffect, useState} from 'react';
 
-export default function AuthenticatedLayout({ header, children, flash }) {
+export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const { post } = useForm();
     const [balance, setBalance] = useState(user.balance);
 
-    const [flashVisible, setFlashVisible] = useState(true);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setFlashVisible(false);
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }, [flash]);
-
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-
-    const fetchBalance = async () => {
-        const response = await fetch(route('getBalance'));
-        const data = await response.json();
-        setBalance(data);
-    };
-
-    const handleIncreaseBalance = async () => {
-        await post(route('increaseBalance'), {
-            onSuccess: () => fetchBalance()
-        });
+    const handleIncreaseBalance = async (e) => {
+        try {
+            const response = await fetch(route('increaseBalance'));
+            const res = await response.json();
+            const { status, message } = res;
+            setBalance(balance);
+            if (status === 'success') {
+                alert(message);
+            } else {
+                alert(message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
         <div className="min-h-screen bg-no-repeat bg-fixed bg-center bg-cover" style={{ backgroundImage: 'url(assets/bg-train.jpg)', backgroundSize: 'full' }}>
-            {flashVisible && flash && flash.error && (
-                <div className="fixed top-4 left-1/2 bg-red-500 text-white p-4 rounded-md">
-                    {flash.error}
-                </div>
-            )}
-            {flashVisible && flash && flash.success && (
-                <div className="fixed top-4 left-1/2 bg-green-500 text-white p-4 rounded-md">
-                    {flash.success}
-                </div>
-            )}
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -106,7 +89,7 @@ export default function AuthenticatedLayout({ header, children, flash }) {
                                             Профиль
                                         </Dropdown.Link>
                                         <Dropdown.Link as="button" onClick={handleIncreaseBalance}>
-                                            Пополнить баланс ({balance})
+                                            Пополнить баланс
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}

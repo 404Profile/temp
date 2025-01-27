@@ -9,27 +9,10 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
     const [arrivalPoint, setArrivalPoint] = useState('');
     const [departureDate, setDepartureDate] = useState('');
     const [filteredRoutes, setFilteredRoutes] = useState(initialRoutes);
-    const [flashVisible, setFlashVisible] = useState(true);
 
     useEffect(() => {
         filterRoutes();
     }, [departurePoint, arrivalPoint, departureDate]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setFlashVisible(false);
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }, [flash]);
-
-    const show = () => {
-        const timer = setTimeout(() => {
-            setFlashVisible(false);
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }
 
     const filterRoutes = () => {
         const filtered = initialRoutes.filter(route => {
@@ -40,10 +23,19 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
         setFilteredRoutes(filtered);
     };
 
-    const handleOrderTicket = (routeId) => {
-        post(route('tickets.store', { route_id: routeId }), {
-            onSuccess: () => show,
-        });
+    const handleOrderTicket = async (routeId) => {
+        try {
+            const response = await fetch(route('storeTicket', { route_id: routeId }));
+            const res = await response.json();
+            const { status, message } = res;
+            if (status === 'success') {
+                alert(message);
+            } else {
+                alert(message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -55,18 +47,6 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
             }
         >
             <Head title="Расписание" />
-
-            {flashVisible && flash.error && (
-                <div className="fixed top-4 left-1/2 bg-red-500 text-white p-4 rounded-md">
-                    {flash.error}
-                </div>
-            )}
-            {flashVisible && flash.success && (
-                <div className="fixed top-4 left-1/2 bg-green-500 text-white p-4 rounded-md">
-                    {flash.success}
-                </div>
-            )}
-
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">

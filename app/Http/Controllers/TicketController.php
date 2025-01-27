@@ -34,7 +34,7 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeTicket(Request $request)
     {
         $request->validate([
             'route_id' => 'required|exists:routes,id',
@@ -43,16 +43,23 @@ class TicketController extends Controller
         $existingTicket = Ticket::where('user_id', Auth::id())->where('route_id', $request->route_id)->first();
 
         if ($existingTicket) {
-            return redirect()->route('routes.index')->with('error', 'Билет уже был заказан на этот маршрут');
+            return response()->json(['status' => 'error', 'message' => 'Билет уже был заказан на этот маршрут'])
+                ->setStatusCode(201);
         }
 
         $route = Route::query()->where('id', $request->route_id)->first();
+
+        if ($route->departure_date < now()->toDateString()) {
+            return response()->json(['status' => 'error', 'message' => 'Нельзя заказать старый билет'])
+                ->setStatusCode(201);
+        }
 
         $user = User::query()->where('id', Auth::id())->first();
         $user->balance -= $route->cost;
 
         if ($user->balance < 0) {
-            return redirect()->back()->with('error', 'У вас недостаточно денег');
+            return response()->json(['status' => 'error', 'message' => 'У вас недостаточно денег'])
+                ->setStatusCode(201);
         }
 
         $user->update();
@@ -62,7 +69,8 @@ class TicketController extends Controller
         $ticket->route_id = $route->id;
         $ticket->save();
 
-        return redirect()->route('tickets.index')->with('success', 'Билет успешно заказан');
+        return response()->json(['status' => 'success', 'message' => 'Билет успешно заказан'])
+            ->setStatusCode(201);
     }
 
 
