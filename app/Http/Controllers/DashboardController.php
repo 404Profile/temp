@@ -24,8 +24,13 @@ class DashboardController extends Controller
             ->toArray();
 
         $routes = Route::query()
-            ->where('departure_date', '>=', now()->toDateString())
-            ->where('departure_time', '>=', now()->addHours(3)->toTimeString())
+            ->where(function ($query) {
+                $query->where('departure_date', '>', now()->toDateString())
+                    ->orWhere(function ($query) {
+                        $query->where('departure_date', '=', now()->toDateString())
+                            ->where('departure_time', '>=', now()->addHours(3)->toTimeString());
+                    });
+            })
             ->get();
 
         return Inertia::render('Dashboard', [

@@ -26,8 +26,13 @@ class RouteController extends Controller
             ->toArray();
 
         $routes = Route::query()
-            ->where('departure_date', '>=', now()->toDateString())
-            ->where('departure_time', '>=', now()->addHours(3)->toTimeString())
+            ->where(function ($query) {
+                $query->where('departure_date', '>', now()->toDateString())
+                    ->orWhere(function ($query) {
+                        $query->where('departure_date', '=', now()->toDateString())
+                            ->where('departure_time', '>=', now()->addHours(3)->toTimeString());
+                    });
+            })
             ->get();
 
         return Inertia::render('Routes/Index', [
@@ -36,6 +41,7 @@ class RouteController extends Controller
             'initialRoutes' => $routes,
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
