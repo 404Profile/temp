@@ -1,26 +1,54 @@
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import {useForm, usePage} from '@inertiajs/react';
-import React, {useEffect, useState} from 'react';
+import { useForm, usePage } from '@inertiajs/react';
+import React, {useEffect, useRef, useState} from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const { post } = useForm();
-    const [balance, setBalance] = useState(user.balance);
+    const balanceRef = useRef(null);
+    const [balance, setBalance] = useState(() => {
+        const storedBalance = localStorage.getItem('balance');
+        if (storedBalance) {
+            return storedBalance;
+        } else {
+            const initialBalance = user.balance;
+            localStorage.setItem('balance', initialBalance);
+            return initialBalance;
+        }
+    });
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const storedBalance = localStorage.getItem('balance');
+            if (storedBalance) {
+                setBalance(storedBalance);
+                if (balanceRef.current) {
+                    balanceRef.current.textContent = storedBalance;
+                }
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
 
     const handleIncreaseBalance = async (e) => {
         try {
             const response = await fetch(route('increaseBalance'));
             const res = await response.json();
-            const { status, message } = res;
+            const { status, message, balance } = res;
+            alert(message);
+            localStorage.setItem('balance', balance);
             setBalance(balance);
-            if (status === 'success') {
-                alert(message);
-            } else {
-                alert(message);
+            if (balanceRef.current) {
+                balanceRef.current.textContent = balance;
             }
         } catch (error) {
             console.error('Error:', error);
@@ -56,6 +84,11 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div>
+                                <p ref={balanceRef} className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300">
+                                    Баланс: {balance}
+                                </p>
+                            </div>
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>

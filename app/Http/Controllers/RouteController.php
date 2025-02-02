@@ -13,10 +13,22 @@ class RouteController extends Controller
      */
     public function index()
     {
-        $departurePoints = Route::select('departure_point')->distinct()->pluck('departure_point')->toArray();
-        $arrivalPoints = Route::select('arrival_point')->distinct()->pluck('arrival_point')->toArray();
+        $departurePoints = Route::query()
+            ->select('departure_point')
+            ->distinct()
+            ->pluck('departure_point')
+            ->toArray();
 
-        $routes = Route::all();
+        $arrivalPoints = Route::query()
+            ->select('arrival_point')
+            ->distinct()
+            ->pluck('arrival_point')
+            ->toArray();
+
+        $routes = Route::query()
+            ->where('departure_date', '>=', now()->toDateString())
+            ->where('departure_time', '>=', now()->addHours(3)->toTimeString())
+            ->get();
 
         return Inertia::render('Routes/Index', [
             'departurePoints' => $departurePoints,

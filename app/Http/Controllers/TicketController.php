@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TicketController extends Controller
@@ -19,7 +20,8 @@ class TicketController extends Controller
         $tickets = Ticket::with('route')->where('user_id', Auth::id())->get();
 
         return Inertia::render('Tickets/Index', [
-            'tickets' => $tickets
+            'tickets' => $tickets,
+            'count' => count($tickets),
         ]);
     }
 
@@ -69,11 +71,11 @@ class TicketController extends Controller
         $ticket->route_id = $route->id;
         $ticket->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Билет успешно заказан'])
-            ->setStatusCode(201);
+        return Redirect::route('tickets.index')->with('success', 'Билет успешно заказан');
+
+//        return response()->json(['status' => 'success', 'message' => 'Билет успешно заказан', 'redirect' => route('tickets.index')])
+//            ->setStatusCode(201);
     }
-
-
 
     /**
      * Display the specified resource.

@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::get('/increase-balance', [BalanceController::class, 'increaseBalance'])->name('increaseBalance');
     Route::get('/storeTicket', [TicketController::class, 'storeTicket'])->name('storeTicket');
-    Route::post('/get-balance', [BalanceController::class, 'getBalance'])->name('getBalance');
+    Route::get('/get-balance', [BalanceController::class, 'getBalance'])->name('getBalance');
 });
 
 require __DIR__.'/auth.php';

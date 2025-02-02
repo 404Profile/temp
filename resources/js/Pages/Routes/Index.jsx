@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function Dashboard({ initialRoutes, departurePoints, arrivalPoints, flash }) {
+export default function Routes({ initialRoutes, departurePoints, arrivalPoints, flash }) {
     const { post, delete: destroy } = useForm();
 
     const [departurePoint, setDeparturePoint] = useState('');
@@ -102,9 +102,6 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
                                         <div>Дата и время отправления: {route.departure_date} {route.departure_time}</div>
                                         <div>Дата и время прибытия: {route.arrival_date} {route.arrival_time}</div>
                                         <div>Время в пути: {calculateTravelTime(route.departure_date, route.departure_time, route.arrival_date, route.arrival_time)}</div>
-                                        <div className="w-full flex justify-around">
-                                            <button onClick={() => handleOrderTicket(route.id)} className="px-4 py-2 bg-green-500 text-white mr-2 rounded-md w-1/3">Заказать билет</button>
-                                        </div>
                                     </div>
                                 ))
                             ) : (
