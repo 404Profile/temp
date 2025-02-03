@@ -45,23 +45,20 @@ class TicketController extends Controller
         $existingTicket = Ticket::where('user_id', Auth::id())->where('route_id', $request->route_id)->first();
 
         if ($existingTicket) {
-            return response()->json(['status' => 'error', 'message' => 'Билет уже был заказан на этот маршрут'])
-                ->setStatusCode(201);
+            return response()->json(['alert' => 'Билет уже был заказан на этот маршрут']);
         }
 
         $route = Route::query()->where('id', $request->route_id)->first();
 
         if ($route->departure_date < now()->toDateString()) {
-            return response()->json(['status' => 'error', 'message' => 'Нельзя заказать старый билет'])
-                ->setStatusCode(201);
+            return response()->json(['alert' => 'Нельзя заказать старый билет']);
         }
 
         $user = User::query()->where('id', Auth::id())->first();
         $user->balance -= $route->cost;
 
         if ($user->balance < 0) {
-            return response()->json(['status' => 'error', 'message' => 'У вас недостаточно денег'])
-                ->setStatusCode(201);
+            return response()->json(['alert' => 'У вас недостаточно денег']);
         }
 
         $user->update();
@@ -71,10 +68,7 @@ class TicketController extends Controller
         $ticket->route_id = $route->id;
         $ticket->save();
 
-        return Redirect::route('tickets.index')->with('success', 'Билет успешно заказан');
-
-//        return response()->json(['status' => 'success', 'message' => 'Билет успешно заказан', 'redirect' => route('tickets.index')])
-//            ->setStatusCode(201);
+        return response()->json(['success' => 'Билет успешно заказан', 'redirect' => route('tickets.index')]);
     }
 
     /**

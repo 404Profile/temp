@@ -23,7 +23,19 @@ export default function Dashboard({ initialRoutes, departurePoints, arrivalPoint
     };
 
     const handleOrderTicket = (routeId) => {
-        router.get(route('storeTicket', { route_id: routeId }));
+        fetch(route('storeTicket', { route_id: routeId }))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.success);
+                    window.location.href = data.redirect;
+                } else if (data.alert) {
+                    alert(data.alert);
+                }
+            })
+            .catch(error => {
+                alert('Произошла ошибка: ' + error.message);
+            });
     };
 
     return (

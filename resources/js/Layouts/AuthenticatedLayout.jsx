@@ -9,35 +9,10 @@ export default function AuthenticatedLayout({ header, children }) {
     const { post } = useForm();
     const balanceRef = useRef(null);
     const [balance, setBalance] = useState(() => {
-        const storedBalance = localStorage.getItem('balance');
-        if (storedBalance) {
-            return storedBalance;
-        } else {
-            const initialBalance = user.balance;
-            localStorage.setItem('balance', initialBalance);
-            return initialBalance;
-        }
+        return user.balance;
     });
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
-    useEffect(() => {
-        const handleStorageChange = () => {
-            const storedBalance = localStorage.getItem('balance');
-            if (storedBalance) {
-                setBalance(storedBalance);
-                if (balanceRef.current) {
-                    balanceRef.current.textContent = storedBalance;
-                }
-            }
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
 
     const handleIncreaseBalance = async (e) => {
         try {
@@ -45,7 +20,6 @@ export default function AuthenticatedLayout({ header, children }) {
             const res = await response.json();
             const { status, message, balance } = res;
             alert(message);
-            localStorage.setItem('balance', balance);
             setBalance(balance);
             if (balanceRef.current) {
                 balanceRef.current.textContent = balance;
