@@ -19,7 +19,7 @@ export default function Tickets({ tickets, flash, count }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-gray-800">
                     Мои билеты
                 </h2>
             }
@@ -30,7 +30,7 @@ export default function Tickets({ tickets, flash, count }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
                     <div className="w-full">
-                        <div className="max-w-md mx-auto overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800 mb-4">
+                        <div className="max-w-md mx-auto overflow-hidden bg-white/80 shadow-sm sm:rounded-lg backdrop-blur-sm mb-4">
                             <div className="py-2 font-bold text-md">
                                 <p className="text-center">
                                     Заказано билетов: { count }
@@ -39,8 +39,8 @@ export default function Tickets({ tickets, flash, count }) {
                         </div>
                     </div>
 
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg backdrop-blur-sm">
+                        <div className="p-6 text-gray-900">
                             {tickets.length > 0 ? (
                                 tickets.map(ticket => (
                                 <div key={ticket.id} className="mb-4 p-4 border rounded">

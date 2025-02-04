@@ -41,7 +41,7 @@ export default function Routes({ initialRoutes, departurePoints, arrivalPoints, 
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-gray-800">
                     Расписание
                 </h2>
             }
@@ -49,50 +49,50 @@ export default function Routes({ initialRoutes, departurePoints, arrivalPoints, 
             <Head title="Расписание" />
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <div className="mb-4 flex justify-between">
-                                <div>
-                                    <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка отправления</p>
-                                    <select
-                                        value={departurePoint}
-                                        onChange={(e) => setDeparturePoint(e.target.value)}
-                                        className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
-                                    >
-                                        <option value="">Выберите точку отправления</option>
-                                        {departurePoints.map(point => (
-                                            <option key={point} value={point} disabled={point === arrivalPoint}>
-                                                {point}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка прибытия</p>
-                                    <select
-                                        value={arrivalPoint}
-                                        onChange={(e) => setArrivalPoint(e.target.value)}
-                                        className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
-                                    >
-                                        <option value="">Выберите точку прибытия</option>
-                                        {arrivalPoints.map(point => (
-                                            <option key={point} value={point} disabled={point === departurePoint}>
-                                                {point}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Дата отправления</p>
-                                    <input
-                                        type="date"
-                                        value={departureDate}
-                                        onChange={(e) => setDepartureDate(e.target.value)}
-                                        className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
-                                    />
-                                </div>
+                    <div className="p-6 text-gray-900">
+                        <div className="mb-4 flex justify-between">
+                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                                <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка отправления</p>
+                                <select
+                                    value={departurePoint}
+                                    onChange={(e) => setDeparturePoint(e.target.value)}
+                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                >
+                                    <option value="">Выберите точку отправления</option>
+                                    {departurePoints.map(point => (
+                                        <option key={point} value={point} disabled={point === arrivalPoint}>
+                                            {point}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
+                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                                <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка прибытия</p>
+                                <select
+                                    value={arrivalPoint}
+                                    onChange={(e) => setArrivalPoint(e.target.value)}
+                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                >
+                                    <option value="">Выберите точку прибытия</option>
+                                    {arrivalPoints.map(point => (
+                                        <option key={point} value={point} disabled={point === departurePoint}>
+                                            {point}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                                <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Дата отправления</p>
+                                <input
+                                    type="date"
+                                    value={departureDate}
+                                    onChange={(e) => setDepartureDate(e.target.value)}
+                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                />
+                            </div>
+                        </div>
 
+                        <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
                             {filteredRoutes.length > 0 ? (
                                 filteredRoutes.map(route => (
                                     <div key={route.id} className="mb-4 p-4 border rounded">
