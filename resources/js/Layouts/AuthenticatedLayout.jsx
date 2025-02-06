@@ -166,6 +166,18 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Главная
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('routes.index')}
+                            active={route().current('routes.index')}
+                        >
+                            Расписание
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('tickets.index')}
+                            active={route().current('tickets.index')}
+                        >
+                            Мои билеты
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
@@ -180,7 +192,10 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
+                                Профиль
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink onClick={handleIncreaseBalance}>
+                                Пополнить баланс ({ user.balance })
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"

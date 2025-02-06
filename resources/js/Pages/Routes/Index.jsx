@@ -50,13 +50,13 @@ export default function Routes({ initialRoutes, departurePoints, arrivalPoints, 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="p-6 text-gray-900">
-                        <div className="mb-4 flex justify-between">
-                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                        <div className="mb-4 block lg:flex lg:justify-between space-y-2 lg:space-y-0">
+                            <div className="overflow-hidden bg-white/80 shadow-sm rounded-lg p-6 backdrop-blur-sm">
                                 <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка отправления</p>
                                 <select
                                     value={departurePoint}
                                     onChange={(e) => setDeparturePoint(e.target.value)}
-                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                    className="w-full flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
                                 >
                                     <option value="">Выберите точку отправления</option>
                                     {departurePoints.map(point => (
@@ -66,12 +66,12 @@ export default function Routes({ initialRoutes, departurePoints, arrivalPoints, 
                                     ))}
                                 </select>
                             </div>
-                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                            <div className="overflow-hidden bg-white/80 shadow-sm rounded-lg p-6 backdrop-blur-sm">
                                 <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Точка прибытия</p>
                                 <select
                                     value={arrivalPoint}
                                     onChange={(e) => setArrivalPoint(e.target.value)}
-                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                    className="w-full flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
                                 >
                                     <option value="">Выберите точку прибытия</option>
                                     {arrivalPoints.map(point => (
@@ -81,18 +81,18 @@ export default function Routes({ initialRoutes, departurePoints, arrivalPoints, 
                                     ))}
                                 </select>
                             </div>
-                            <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                            <div className="overflow-hidden bg-white/80 shadow-sm rounded-lg p-6 backdrop-blur-sm">
                                 <p className="mt-2 text-md font-medium tracking-tight text-gray-950 max-lg:text-center">Дата отправления</p>
                                 <input
                                     type="date"
                                     value={departureDate}
                                     onChange={(e) => setDepartureDate(e.target.value)}
-                                    className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
+                                    className="w-full flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600"
                                 />
                             </div>
                         </div>
 
-                        <div className="overflow-hidden bg-white/80 shadow-sm sm:rounded-lg p-6 backdrop-blur-sm">
+                        <div className="overflow-hidden bg-white/80 shadow-sm rounded-lg p-6 backdrop-blur-sm">
                             {filteredRoutes.length > 0 ? (
                                 filteredRoutes.map(route => (
                                     <div key={route.id} className="mb-4 p-4 border rounded">
